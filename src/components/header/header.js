@@ -1,51 +1,32 @@
 import React from 'react';
-import styled from 'styled-components';
+import { Nav, NavItem} from 'reactstrap';
+import {Link} from 'react-router-dom';
 
-const HeaderBlock = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 80px;
-`;
-
-const HeaderTitle = styled.h3`
-    font-size: 24px;
-    color: #fff;
-    margin: 0;
-`;
-
-const HeaderLinks = styled.ul`
-    display: flex;
-    margin: 0;
-    align-items: center;
-    color: #fff;
-    list-style-type: none;
-    li {
-        margin-right: 20px;
-        font-size: 18px;
-    }
-`;
 
 const Header = () => {
     return (
-        <HeaderBlock>
-            <HeaderTitle>
-                <a href="#">
-                Game of Thrones DB
-                </a>
-            </HeaderTitle>
-            <HeaderLinks>
-                <li>
-                    <a href="#">Characters</a>
-                </li>
-                <li>
-                    <a href="#">Houses</a>
-                </li>
-                <li>
-                    <a href="#">Books</a>   
-                </li>
-            </HeaderLinks>
-        </HeaderBlock>
+        <Nav justified style={{
+                    marginTop: 20,
+                    marginBottom: 20
+                }}>
+            <NavItem className="text-left"  tag='h4'>
+                <Link className="text-white" to='/'>Game of Thrones DB</Link> 
+            </NavItem>
+            <Nav>
+                <NavItem>
+                    <Link className="text-white" to='/characters'>Characters</Link>
+                </NavItem>
+                <NavItem style={{
+                    marginRight: 30,
+                    marginLeft: 30
+                }}>
+                    <Link  className="text-white" to='/houses'>Houses</Link>
+                </NavItem>
+                <NavItem>
+                    <Link className="text-white" to='/books/'>Books</Link>
+                </NavItem>
+            </Nav>
+        </Nav>
     );
 };
 

@@ -1,73 +1,52 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import { ListGroup, ListGroupItem, Spinner } from 'reactstrap'; 
 import './itemList.css';
-import gotService from '../../services/gotService';
 import ErrorMessage from '../error';
 
 
-export default class ItemList extends Component {
+function ItemList({getData, onItemSelected, renderItem}){
 
-    gotService = new gotService();
+    const [itemList, updateList] = useState([]);
 
-    state = {
-        charList: null,
-        error: false
-    }
-    componentDidMount() {
-        this.gotService.getAllCharacters()
-            .then((charList) => {
-                this.setState({
-                    charList,
-                    error: false
-                });
-            })
-            .catch(() => {this.onError()});
-    }
-    componentDidCatch(){
-        this.setState({
-            charList: null,
-            error: true
+    useEffect(() => {
+        getData()
+        .then((data) => {
+            updateList(data);
         })
-    }
-    onError(status){
-        this.setState({
-            charList: null,
-            error: true
-        })
-    }
-    renderItems(arr) {
+    }, []);
+
+    
+    function renderItems(arr) {
         return arr.map((item) => {
-            const {id, name} = item;
+
+            const {id} = item;
+
+            const label = renderItem(item);
+
             return (
                 <ListGroupItem
                     key={id}
                     style={{ cursor: 'pointer' }}
-                    onClick={() => this.props.onCharSelected(id)} 
+                    onClick={() => onItemSelected(id)} 
                     action>
-                    {name}
+                    {label}
                 </ListGroupItem>
             )
         })
     }
 
-
-    render() {
-        const {charList, error} = this.state;
-
-        if(error){
-            return <ErrorMessage/>
-        }
-
-        if(!charList) {
-            return <Spinner/>
-        }
-
-        const items = this.renderItems(charList);
-
-        return (
-            <ListGroup>
-                {items}
-            </ListGroup>
-        );
+    if(!itemList) {
+        return <Spinner/>
     }
+
+    const items = renderItems(itemList);
+
+    return (
+        <ListGroup>
+            {items}
+        </ListGroup>
+    );
+
 }
+
+export default ItemList;
